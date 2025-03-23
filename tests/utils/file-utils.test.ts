@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { fileExists, ensureDir, writeJsonFile, writeTextFile, resolvePath } from '../../src/utils/file-utils';
+import { fileExists, ensureDir, writeJsonFile, writeTextFile, resolvePath, readJsonFile } from '../../src/utils/file-utils';
 import fs from 'fs/promises';
 import path from 'path';
 
@@ -8,7 +8,8 @@ vi.mock('fs/promises', () => ({
     default: {
         access: vi.fn(),
         mkdir: vi.fn(),
-        writeFile: vi.fn()
+        writeFile: vi.fn(),
+        readFile: vi.fn()
     }
 }));
 
@@ -218,5 +219,72 @@ describe('writeTextFile', () => {
         await expect(writeTextFile(filePath, content)).rejects.toThrow(writeError);
         expect(path.dirname).toHaveBeenCalledWith(filePath);
         expect(fs.mkdir).toHaveBeenCalledWith('/path/to', { recursive: true });
+    });
+});
+
+
+describe('readJsonFile', () => {
+    beforeEach(() => {
+        vi.resetAllMocks();
+    });
+
+    it('should read and parse JSON file correctly', async () => {
+        // Arrange
+        const filePath = '/path/to/file.json';
+        const jsonData = { key: 'value', nested: { foo: 'bar' } };
+        const fileContent = JSON.stringify(jsonData);
+        vi.mocked(fs.readFile).mockResolvedValue(fileContent);
+
+        // Act
+        const result = await readJsonFile(filePath);
+
+        // Assert
+        expect(fs.readFile).toHaveBeenCalledWith(filePath, 'utf-8');
+        expect(result).toEqual(jsonData);
+    });
+
+    it('should throw error if file does not exist', async () => {
+        // Arrange
+        const filePath = '/path/to/non-existing/file.json';
+        const fileError = new Error('ENOENT: no such file or directory');
+        vi.mocked(fs.readFile).mockRejectedValue(fileError);
+
+        // Act & Assert
+        await expect(readJsonFile(filePath)).rejects.toThrow(fileError);
+        expect(fs.readFile).toHaveBeenCalledWith(filePath, 'utf-8');
+    });
+
+    it('should throw error if file contains invalid JSON', async () => {
+        // Arrange
+        const filePath = '/path/to/invalid.json';
+        const invalidJson = '{ "key": "value", invalid json }';
+        vi.mocked(fs.readFile).mockResolvedValue(invalidJson);
+
+        // Act & Assert
+        await expect(readJsonFile(filePath)).rejects.toThrow(SyntaxError);
+        expect(fs.readFile).toHaveBeenCalledWith(filePath, 'utf-8');
+    });
+
+    it('should respect type parameter for return value', async () => {
+        // Arrange
+        interface TestType {
+            name: string;
+            age: number;
+        }
+        const filePath = '/path/to/typed.json';
+        const jsonData: TestType = { name: 'John', age: 30 };
+        const fileContent = JSON.stringify(jsonData);
+        vi.mocked(fs.readFile).mockResolvedValue(fileContent);
+
+        // Act
+        const result = await readJsonFile<TestType>(filePath);
+
+        // Assert
+        expect(fs.readFile).toHaveBeenCalledWith(filePath, 'utf-8');
+        expect(result).toEqual(jsonData);
+
+        // Type checking (compile-time only)
+        const name: string = result.name;
+        const age: number = result.age;
     });
 });

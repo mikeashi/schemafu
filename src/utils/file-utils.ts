@@ -74,3 +74,14 @@ export async function writeTextFile(
 
     await fs.writeFile(filePath, content);
 }
+
+/**
+ * Reads and parses a JSON file
+ * 
+ * @param filePath - Path to the JSON file
+ * @returns Parsed JSON content
+ */
+export async function readJsonFile<T = any>(filePath: string): Promise<T> {
+    const content = await fs.readFile(filePath, 'utf-8');
+    return JSON.parse(content) as T;
+}
