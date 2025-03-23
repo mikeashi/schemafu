@@ -1,6 +1,9 @@
 import chalk from 'chalk';
 import { Command } from 'commander'
 import { registerCommands } from './commands/index.js'
+import { createRequire } from 'node:module';
+const require = createRequire(import.meta.url);
+const { version } = require('../package.json');
 
 
 /**
@@ -13,7 +16,7 @@ export function createCli(): Command {
     program
         .name('schemafu')
         .description('Bundle, validate, and convert JSON Schema to TypeScript')
-        .version("0.1.0");
+        .version(version);
 
     registerCommands(program)
 
