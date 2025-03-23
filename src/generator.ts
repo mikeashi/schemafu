@@ -1,6 +1,6 @@
 import { compile } from 'json-schema-to-typescript';
 import path from 'path';
-import { readJsonFile, writeTextFile } from './utils/file-utils';
+import { readJsonFile, writeTextFile } from './utils/file-utils.js';
 
 export interface TypeScriptGeneratorOptions {
     /** Whether to generate strict types */
