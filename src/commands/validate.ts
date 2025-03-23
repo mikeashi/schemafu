@@ -23,7 +23,7 @@ export async function validateOperation(input: string, options: { strict: boolea
 
 
 export async function validateAction(input: string, options: { strict: boolean }) {
-    validateOperation(input, options);
+    await validateOperation(input, options);
 }
 
 

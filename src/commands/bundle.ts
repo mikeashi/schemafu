@@ -25,7 +25,7 @@ export async function bundleOperation(input: string, options: { output: string; 
 
 
 export async function bundleAction(input: string, options: {output: string; pretty: boolean}) {
-    bundleOperation(input, options);
+    await bundleOperation(input, options);
 }
 
 export function register(program: Command) {

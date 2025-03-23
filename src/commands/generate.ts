@@ -27,7 +27,7 @@ export async function generateOperation(input: string, options: { output: string
 
 
 export async function generateAction(input: string, options: { output: string, strict: boolean, indent: string, banner: string }) {
-    generateOperation(input, options);
+    await generateOperation(input, options);
 }
 
 
