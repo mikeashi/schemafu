@@ -4,7 +4,7 @@ import { resolvePath } from '../utils/file-utils.js';
 import { validateSchema } from '../validator.js';
 
 
-export async function validateAction(input: string, options: { strict: boolean }) {
+export async function validateOperation(input: string, options: { strict: boolean }) {
     const inputPath = resolvePath(input);
     const result = await runOperation('Validating schema', async () => {
         const result = await validateSchema(inputPath, { strict: options.strict });
@@ -18,6 +18,12 @@ export async function validateAction(input: string, options: { strict: boolean }
     });
 
     displayOperationDetails(result);
+    return result;
+}
+
+
+export async function validateAction(input: string, options: { strict: boolean }) {
+    validateOperation(input, options);
 }
 
 

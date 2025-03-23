@@ -4,7 +4,8 @@ import { displayOperationDetails, runOperation } from '../utils/cli-utils.js';
 import defaultConfig from "../utils/config.js";
 import { bundleSchema } from '../bundler.js';
 
-export async function bundelAction(input: string, options: {output: string; pretty: boolean}) {
+
+export async function bundelOperation(input: string, options: { output: string; pretty: boolean }){
     const inputPath = resolvePath(input);
     const outputPath = options.output
         ? resolvePath(options.output)
@@ -19,6 +20,12 @@ export async function bundelAction(input: string, options: {output: string; pret
     });
 
     displayOperationDetails(result);
+    return result;
+}
+
+
+export async function bundelAction(input: string, options: {output: string; pretty: boolean}) {
+    bundelOperation(input, options);
 }
 
 export function register(program: Command) {

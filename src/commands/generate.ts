@@ -5,7 +5,7 @@ import { generateTypeScript } from '../generator.js';
 import defaultConfig from "../utils/config.js";
 
 
-export async function generateAction(input: string, options: { output: string, strict: boolean, indent: string, banner: string }) {
+export async function generateOperation(input: string, options: { output: string, strict: boolean, indent: string, banner: string }) {
     const schemaPath = resolvePath(input);
     const outputPath = options.output
         ? resolvePath(options.output)
@@ -22,6 +22,12 @@ export async function generateAction(input: string, options: { output: string, s
     });
 
     displayOperationDetails(result);
+    return result;
+}
+
+
+export async function generateAction(input: string, options: { output: string, strict: boolean, indent: string, banner: string }) {
+    generateOperation(input, options);
 }
 
 
