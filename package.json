@@ -3,19 +3,39 @@
   "version": "0.1.0",
   "description": "Bundle, validate, and convert JSON Schema to TypeScript",
   "type": "module",
-  "main": "index.js",
+  "bin": {
+    "schemafu": "./dist/index.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
     "start": "node dist/index.js",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "prepublishOnly": "npm run test && npm run build"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/mikeashi/schemafu.git"
   },
-  "keywords": [],
+  "keywords": [
+    "json-schema",
+    "typescript",
+    "schema",
+    "bundler",
+    "validation",
+    "code-generation",
+    "cli",
+    "json",
+    "ts",
+    "converter"
+  ],
   "author": "Mike Ashi",
   "license": "MIT",
   "bugs": {
@@ -36,5 +56,8 @@
     "glob": "^11.0.1",
     "json-schema-to-typescript": "^15.0.4",
     "ora": "^8.2.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
   }
 }
