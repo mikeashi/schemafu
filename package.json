@@ -1,0 +1,36 @@
+{
+  "name": "schemafu",
+  "version": "0.1.0",
+  "description": "Bundle, validate, and convert JSON Schema to TypeScript",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "test": "node dist/index.js bundle ./example/meta-meta-schema.json -p"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mikeashi/schemafu.git"
+  },
+  "keywords": [],
+  "author": "Mike Ashi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mikeashi/schemafu/issues"
+  },
+  "homepage": "https://github.com/mikeashi/schemafu#readme",
+  "devDependencies": {
+    "@types/node": "^22.13.11",
+    "typescript": "^5.8.2"
+  },
+  "dependencies": {
+    "@apidevtools/json-schema-ref-parser": "^11.9.3",
+    "ajv": "^8.17.1",
+    "chalk": "^5.4.1",
+    "commander": "^13.1.0",
+    "glob": "^11.0.1",
+    "json-schema-to-typescript": "^15.0.4",
+    "ora": "^8.2.0"
+  }
+}
