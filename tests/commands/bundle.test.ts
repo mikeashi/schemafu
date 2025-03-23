@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { bundelAction, register } from '../../src/commands/bundle';
+import { bundleAction, register } from '../../src/commands/bundle';
 import { resolvePath } from '../../src/utils/file-utils';
 import { runOperation, displayOperationDetails } from '../../src/utils/cli-utils';
 import defaultConfig from '../../src/utils/config';
@@ -33,7 +33,7 @@ vi.mock('commander', () => {
     };
 });
 
-describe('bundelAction', () => {
+describe('bundleAction', () => {
     beforeEach(() => {
         vi.resetAllMocks();
 
@@ -58,7 +58,7 @@ describe('bundelAction', () => {
         };
 
         // Act
-        await bundelAction(input, options);
+        await bundleAction(input, options);
 
         // Assert
         expect(resolvePath).toHaveBeenCalledWith(input);
@@ -100,7 +100,7 @@ describe('bundelAction', () => {
         };
 
         // Act
-        await bundelAction(input, options);
+        await bundleAction(input, options);
 
         // Assert
         expect(resolvePath).toHaveBeenCalledWith(input);
@@ -126,7 +126,7 @@ describe('bundelAction', () => {
         };
 
         // Act
-        await bundelAction(input, options);
+        await bundleAction(input, options);
 
         // Get the operation function and test it
         const operationFn = vi.mocked(runOperation).mock.calls[0][1];
@@ -161,6 +161,6 @@ describe('register', () => {
         expect(commandMock.argument).toHaveBeenCalledWith('<input>', 'Input schema file path');
         expect(commandMock.option).toHaveBeenCalledWith('-o, --output <path>', 'Output file path');
         expect(commandMock.option).toHaveBeenCalledWith('-p, --pretty', 'Pretty print the output JSON', false);
-        expect(commandMock.action).toHaveBeenCalledWith(bundelAction);
+        expect(commandMock.action).toHaveBeenCalledWith(bundleAction);
     });
 });

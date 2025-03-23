@@ -1,5 +1,5 @@
 import { Command } from "commander";
-import { bundelOperation } from "./bundle.js";
+import { bundleOperation } from "./bundle.js";
 import { validateOperation } from "./validate.js";
 import { generateOperation } from "./generate.js";
 import chalk from "chalk";
@@ -16,7 +16,7 @@ export async function processAction(input: string, options: {
     let resultPath;
 
     // Step 1: Bundle the schema
-    const bundleResult = await bundelOperation(input, { output: options.output, pretty: options.pretty });
+    const bundleResult = await bundleOperation(input, { output: options.output, pretty: options.pretty });
     if (!bundleResult.success || bundleResult.data == null) {
         process.exit(1);
     }

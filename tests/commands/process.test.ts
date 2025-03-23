@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { processAction, register } from '../../src/commands/process';
-import { bundelOperation } from '../../src/commands/bundle';
+import { bundleOperation } from '../../src/commands/bundle';
 import { validateOperation } from '../../src/commands/validate';
 import { generateOperation } from '../../src/commands/generate';
 import { Command } from 'commander';
@@ -8,7 +8,7 @@ import chalk from 'chalk';
 
 // Mock dependencies
 vi.mock('../../src/commands/bundle', () => ({
-    bundelOperation: vi.fn()
+    bundleOperation: vi.fn()
 }));
 
 vi.mock('../../src/commands/validate', () => ({
@@ -44,7 +44,7 @@ describe('processAction', () => {
         vi.spyOn(console, 'log').mockImplementation(() => { });
 
         // Setup default successful responses for each operation
-        vi.mocked(bundelOperation).mockResolvedValue({
+        vi.mocked(bundleOperation).mockResolvedValue({
             success: true,
             message: 'Bundle completed',
             duration: 100,
@@ -92,7 +92,7 @@ describe('processAction', () => {
         await processAction(input, options);
 
         // Assert
-        expect(bundelOperation).toHaveBeenCalledWith(input, {
+        expect(bundleOperation).toHaveBeenCalledWith(input, {
             output: options.output,
             pretty: options.pretty
         });
@@ -128,7 +128,7 @@ describe('processAction', () => {
         await processAction(input, options);
 
         // Assert
-        expect(bundelOperation).toHaveBeenCalled();
+        expect(bundleOperation).toHaveBeenCalled();
         expect(validateOperation).not.toHaveBeenCalled();
         expect(generateOperation).toHaveBeenCalled();
     });
@@ -150,14 +150,14 @@ describe('processAction', () => {
         await processAction(input, options);
 
         // Assert
-        expect(bundelOperation).toHaveBeenCalled();
+        expect(bundleOperation).toHaveBeenCalled();
         expect(validateOperation).toHaveBeenCalled();
         expect(generateOperation).not.toHaveBeenCalled();
     });
 
     it('should exit with code 1 if bundle operation fails', async () => {
         // Arrange
-        vi.mocked(bundelOperation).mockResolvedValue({
+        vi.mocked(bundleOperation).mockResolvedValue({
             success: false,
             message: 'Bundle failed',
             duration: 100,
@@ -203,7 +203,7 @@ describe('processAction', () => {
         // Act & Assert
         await expect(processAction(input, options)).rejects.toThrow('process.exit unexpectedly called with "1"');
         expect(mockExit).toHaveBeenCalledWith(1);
-        expect(bundelOperation).toHaveBeenCalled();
+        expect(bundleOperation).toHaveBeenCalled();
         expect(validateOperation).toHaveBeenCalled();
         expect(generateOperation).not.toHaveBeenCalled();
     });
@@ -230,7 +230,7 @@ describe('processAction', () => {
         // Act & Assert
         await expect(processAction(input, options)).rejects.toThrow('process.exit unexpectedly called with "1"');
         expect(mockExit).toHaveBeenCalledWith(1);
-        expect(bundelOperation).toHaveBeenCalled();
+        expect(bundleOperation).toHaveBeenCalled();
         expect(validateOperation).toHaveBeenCalled();
         expect(generateOperation).toHaveBeenCalled();
     });

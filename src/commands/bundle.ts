@@ -5,7 +5,7 @@ import defaultConfig from "../utils/config.js";
 import { bundleSchema } from '../bundler.js';
 
 
-export async function bundelOperation(input: string, options: { output: string; pretty: boolean }){
+export async function bundleOperation(input: string, options: { output: string; pretty: boolean }){
     const inputPath = resolvePath(input);
     const outputPath = options.output
         ? resolvePath(options.output)
@@ -24,8 +24,8 @@ export async function bundelOperation(input: string, options: { output: string; 
 }
 
 
-export async function bundelAction(input: string, options: {output: string; pretty: boolean}) {
-    bundelOperation(input, options);
+export async function bundleAction(input: string, options: {output: string; pretty: boolean}) {
+    bundleOperation(input, options);
 }
 
 export function register(program: Command) {
@@ -35,5 +35,5 @@ export function register(program: Command) {
         .argument('<input>', 'Input schema file path')
         .option('-o, --output <path>', 'Output file path')
         .option('-p, --pretty', 'Pretty print the output JSON', false)
-        .action(bundelAction)
+        .action(bundleAction)
 }
