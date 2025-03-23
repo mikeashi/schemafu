@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { fileExists, ensureDir, writeJsonFile, writeTextFile } from '../../src/utils/file-utils';
+import { fileExists, ensureDir, writeJsonFile, writeTextFile, resolvePath } from '../../src/utils/file-utils';
 import fs from 'fs/promises';
 import path from 'path';
 
@@ -15,9 +15,63 @@ vi.mock('fs/promises', () => ({
 // Mock the path module
 vi.mock('path', () => ({
     default: {
-        dirname: vi.fn()
+        dirname: vi.fn(),
+        isAbsolute: vi.fn(),
+        resolve: vi.fn()
     }
 }));
+
+// Mock process.cwd() properly
+const originalCwd = process.cwd;
+beforeEach(() => {
+    process.cwd = vi.fn();
+});
+
+afterEach(() => {
+    process.cwd = originalCwd;
+});
+
+describe('resolvePath', () => {
+    beforeEach(() => {
+        vi.resetAllMocks();
+    });
+
+    it('should return the same path if it is absolute', () => {
+        // Arrange
+        const absolutePath = '/absolute/path/to/file.json';
+        vi.mocked(path.isAbsolute).mockReturnValue(true);
+
+        // Act
+        const result = resolvePath(absolutePath);
+
+        // Assert
+        expect(result).toBe(absolutePath);
+        expect(path.isAbsolute).toHaveBeenCalledWith(absolutePath);
+        expect(path.resolve).not.toHaveBeenCalled();
+    });
+
+    it('should resolve relative path against current working directory', () => {
+        // Arrange
+        const relativePath = 'relative/path/to/file.json';
+        const cwd = '/current/working/directory';
+        const resolvedPath = '/current/working/directory/relative/path/to/file.json';
+
+        vi.mocked(path.isAbsolute).mockReturnValue(false);
+        vi.mocked(process.cwd).mockReturnValue(cwd);
+        vi.mocked(path.resolve).mockReturnValue(resolvedPath);
+
+        // Act
+        const result = resolvePath(relativePath);
+
+        // Assert
+        expect(result).toBe(resolvedPath);
+        expect(path.isAbsolute).toHaveBeenCalledWith(relativePath);
+        expect(process.cwd).toHaveBeenCalled();
+        expect(path.resolve).toHaveBeenCalledWith(cwd, relativePath);
+    });
+});
+
+
 
 describe('fileExists', () => {
     beforeEach(() => {

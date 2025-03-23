@@ -2,6 +2,20 @@ import fs from 'fs/promises';
 import path from 'path';
 
 /**
+ * Resolves a file path relative to the current working directory
+ * 
+ * @param filePath - The file path to resolve
+ * @returns The absolute file path
+ */
+export function resolvePath(filePath: string): string {
+    if (path.isAbsolute(filePath)) {
+        return filePath;
+    }
+    return path.resolve(process.cwd(), filePath);
+}
+
+
+/**
  * Checks if a file exists
  * 
  * @param filePath - The file path to check
